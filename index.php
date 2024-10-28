@@ -90,13 +90,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><i class="fas fa-bolt"></i> Listrik PLN</td>
-                            <td>220 V</td>
-                            <td>6,1 A</td>
-                            <td>Tegangan Normal</td>
-                            <td><span class="status aktif">Aktif</span></td>
-                        </tr>
+                    <tr>
+<td><i class="fas fa-bolt"></i> Listrik PLN</td>
+    <td>220 V</td>
+    <td>6,1 A</td>
+    <td>Tegangan Normal</td>
+    <?php $status = 'aktifasdad'; ?>
+    <td>
+        <?= $status == 'aktif' 
+            ? '<span class="status aktif">Aktif</span>' 
+            : '<span class="status tidak-aktif">Tidak Aktif</span>' 
+        ?>
+    </td>
+</tr>
+
                         <tr>
                             <td><i class="fas fa-car-battery"></i> Accu</td>
                             <td>12 V</td>
