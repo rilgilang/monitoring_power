@@ -18,31 +18,18 @@ function getRealtimeDataArus()
     }
 
     // Query to fetch data from RealtimeData table
-    $sql = "SELECT waktu_pengukuran, arus FROM RealtimeData WHERE sumberdaya_id = $sumberdaya_id";
+    $sql = "SELECT waktu_pengukuran, arus FROM RealtimeData WHERE sumberdaya_id = $sumberdaya_id ORDER by waktu_pengukuran ASC";
     $result = $conn->query($sql);
 
-    $hourlyData = [];
-    $hourlyCount = [];
+    $averageData = [];
 
     // Process each row
     while ($row = $result->fetch_assoc()) {
-        // Extract hour from the datetime field
-        $hour = date("H:00", strtotime($row['waktu_pengukuran']));
+        // Format waktu_pengukuran to HH:mm:ss
+        $time = date("H:i:s", strtotime($row['waktu_pengukuran']));
 
-        // Initialize or accumulate arus and count for each hour
-        if (isset($hourlyData[$hour])) {
-            $hourlyData[$hour] += $row['arus'];
-            $hourlyCount[$hour]++;
-        } else {
-            $hourlyData[$hour] = $row['arus'];
-            $hourlyCount[$hour] = 1;
-        }
-    }
-
-    // Calculate average for each hour
-    $averageData = [];
-    foreach ($hourlyData as $hour => $sum) {
-        $averageData[$hour] = $sum / $hourlyCount[$hour];
+        // Populate array with formatted time as key and arus as value
+        $averageData[$time] = $row['arus'];
     }
 
     // Output as JSON
