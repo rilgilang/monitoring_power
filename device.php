@@ -15,7 +15,9 @@
   <div class="content" id="content">
     <div class="header">
       <i class="fas fa-bars menu-icon" id="menu-icon"></i>
-      <h1><?= deviceChecker($_GET['id']) ?></h1>
+      <h1>
+        <?= deviceChecker($_GET['id']) ?>
+      </h1>
       <div style="position: relative;">
         <i class="fas fa-bell notification-icon" id="notification-icon"></i>
         <span class="notification-badge" id="notification-badge">0</span>
@@ -79,7 +81,7 @@
           </div>
           <div class="dropdown-container">
             <select id="chartSelector" class="chart-selector">
-              <option value="listrik">Grafik Listrik</option>
+              <option value="pln">Grafik Listrik</option>
               <option value="accu">Grafik Accu</option>
               <option value="ups">Grafik UPS</option>
             </select>
@@ -92,9 +94,12 @@
     </div>
   </div>
 
-  <script src="js/websocket.js"></script>
+  <!-- <script src="js/websocket.js"></script> -->
   <script src="js/deviceData.js"></script>
   <script>
+    setInterval(fetchData(<?= $_GET['id'] ?>, null), 2000);
+    fetchData(<?= $_GET['id'] ?>, null); // Initial call to populate data
+
     // Update Date Functionality
     function updateDate() {
       const now = new Date();
@@ -117,19 +122,21 @@
       isDateSelected = true
       const rawDate = event.target.value; // Get the value from the datepicker
       const selectedDate = new Date(rawDate); // Parse it into a Date object
-      fetchData(1, selectedDate.toISOString().split("T")[0]) // Call your main function
+
+      if (Date.now() == selectedDate) {
+        isDateSelected = false
+      } else {
+        fetchData(<?= $_GET['id']; ?>, selectedDate.toISOString().split("T")[0]) // Call your main function
+      }
     });
 
-    // if (!isDateSelected){
+    // if (!isDateSelected) {
     //   // Set an interval to fetch data without a date if no change event is triggered
-    //   setInterval(fetchData, 2000);
-    // }else{
-    //   console.log("isDateSelected --> ", isDateSelected)
-    //   fetchData(1, dateselected);
-    //   isDateSelected = false;
+    //   setInterval(fetchData(1, null), 2000);
     // }
 
     updateDate();
+
 
     // Notification Logic
     const menuIcon = document.getElementById("menu-icon");

@@ -1,7 +1,9 @@
 const ctx = document.getElementById("powerChart").getContext("2d");
 
+let selectedGraph = ""
 
-export const dataListrik = {
+// export const dataListrik = {
+const dataListrik = {
   labels: [], // To hold time labels from the API (e.g., "00:01:04", "01:00:00")
   datasets: [
     {
@@ -25,53 +27,25 @@ export const dataListrik = {
   ],
 };
 
-exports.dataListrik = dataListrik;
+// exports.dataListrik = dataListrik;
 
 
 // Data untuk Grafik Accu
 const dataAccu = {
-  labels: [
-    "00:00",
-    "01:00",
-    "02:00",
-    "03:00",
-    "04:00",
-    "05:00",
-    "06:00",
-    "07:00",
-    "08:00",
-    "09:00",
-    "10:00",
-    "11:00",
-    "12:00",
-    "13:00",
-    "14:00",
-    "15:00",
-    "16:00",
-    "17:00",
-    "18:00",
-    "19:00",
-    "20:00",
-    "21:00",
-    "22:00",
-    "23:00",
-  ],
+  labels: [],
   datasets: [
     {
       label: "Tegangan Accu (V)",
-      data: [
-        12.5, 12.3, 12.1, 12.0, 11.8, 11.6, 11.4, 11.3, 11.5, 11.8, 12.0, 12.2,
-        12.4, 12.6, 12.8, 12.7, 12.5, 12.3, 12.1, 11.9, 11.8, 11.6, 11.4, 11.2,
-      ],
+      labelKey: "accu_volt",
+      data: [],
       borderColor: "darkblue",
       borderWidth: 2,
       yAxisID: "y1",
     },
     {
       label: "Arus Accu (A)",
-      data: [
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      ],
+      labelKey: "accu_current",
+      data: [],
       borderColor: "orange",
       borderWidth: 2,
       yAxisID: "y2",
@@ -82,48 +56,20 @@ const dataAccu = {
 // Data untuk Grafik UPS
 const dataUPS = {
   labels: [
-    "00:00",
-    "01:00",
-    "02:00",
-    "03:00",
-    "04:00",
-    "05:00",
-    "06:00",
-    "07:00",
-    "08:00",
-    "09:00",
-    "10:00",
-    "11:00",
-    "12:00",
-    "13:00",
-    "14:00",
-    "15:00",
-    "16:00",
-    "17:00",
-    "18:00",
-    "19:00",
-    "20:00",
-    "21:00",
-    "22:00",
-    "23:00",
   ],
   datasets: [
     {
       label: "Tegangan UPS (V)",
-      data: [
-        12.0, 12.0, 12.0, 12.0, 12.0, 11.9, 11.7, 11.5, 11.4, 11.3, 11.2, 11.0,
-        10.8, 10.7, 10.6, 10.5, 10.4, 10.3, 10.2, 10.1, 10.0, 9.9, 9.8, 9.7,
-      ],
+      labelKey: "ups_volt",
+      data: [],
       borderColor: "red",
       borderWidth: 2,
       yAxisID: "y1",
     },
     {
       label: "Arus UPS (A)",
-      data: [
-        0.5, 0.5, 0.5, 0.5, 0.5, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5, 0.4, 0.4,
-        0.4, 0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5, 0.5,
-      ],
+      labelKey: "ups_current",
+      data: [],
       borderColor: "purple",
       borderWidth: 2,
       yAxisID: "y2",
@@ -178,40 +124,43 @@ let currentChart = new Chart(ctx, {
 // Function to fetch data from the API and update the chart
 function fetchData(id, date) {
   $.ajax({
-    url: `http://localhost:8081/api/monitoring.php?device_id=${id}&date=${date}`,
+    url: `api/monitoring.php?id=${id}&date=${date}`,
     method: "GET",
     dataType: "json",
     success: function (result) {
       // Update the chart data and labels
       dataListrik.labels = result.labels;
+      dataAccu.labels = result.labels;
+      dataUPS.labels = result.labels;
 
-      result.data.forEach((dataset) => {
-        if (dataset.label_key === "pln_volt") {
-          dataListrik.datasets[0].data = dataset.data;
-        } else if (dataset.label_key === "pln_current") {
-          dataListrik.datasets[1].data = dataset.data;
+      result.data.graph.forEach((dataset) => {
+        switch (dataset.label_key) {
+          case "pln_volt":
+            dataListrik.datasets[0].data = dataset.data;
+            break;
+          case "pln_current":
+            dataListrik.datasets[1].data = dataset.data;
+            break;
+          case "accu_volt":
+            dataAccu.datasets[0].data = dataset.data;
+            break;
+          case "accu_current":
+            dataAccu.datasets[1].data = dataset.data;
+            break;
+          case "ups_volt":
+            dataUPS.datasets[0].data = dataset.data;
+            break;
+          case "ups_current":
+            dataUPS.datasets[1].data = dataset.data;
+            break;
+          default:
+            // Handle cases where label_key doesn't match any of the above
+            console.warn(`Unknown label_key: ${dataset.label_key}`);
         }
       });
 
-      // const plnCurrentChart = dataListrik.datasets.find(
-      //   (dataset) => dataset.labelKey === "pln_current"
-      // );
-      // const plnVoltChart = dataListrik.datasets.find(
-      //   (dataset) => dataset.labelKey === "pln_volt"
-      // );
-
-      // const plnCurrentDataset = result.data.find(
-      //   (dataset) => dataset.label_key === "pln_current"
-      // );
-      // const plnVoltDataset = result.data.find(
-      //   (dataset) => dataset.label_key === "pln_volt"
-      // );
-
-      // plnCurrentChart.data = plnCurrentDataset.data;
-      // plnVoltChart.data = plnVoltDataset.data;
-
-      // Refresh the chart to display the new data
       currentChart.update();
+      fillTable(result.data, id);
     },
     error: function (jqXHR, textStatus, errorThrown) {
       console.error("Error fetching data:", textStatus, errorThrown);
@@ -223,6 +172,107 @@ function fetchData(id, date) {
 // setInterval(fetchData, 2000);
 // fetchData(); // Initial call to populate data
 
+function fillTable(data, deviceId){
+   // Update the temperature
+   if (data.temperature !== undefined) {
+    document.getElementById(
+      `device-${deviceId}-temperature`
+    ).textContent = `${data.temperature}°C`;
+    // lastData[0].temperature = `${data.temperature}°C`;
+  }
+
+  // Update PLN data
+  if (data.pln) {
+    if (data.pln.voltage !== undefined) {
+      document.getElementById(
+        `device-${deviceId}-pln-voltage`
+      ).textContent = `${data.pln.voltage} V`;
+      // lastData[0].pln.voltage = `${data.pln.voltage} V`;
+    }
+    if (data.pln.current !== undefined) {
+      document.getElementById(
+        `device-${deviceId}-pln-current`
+      ).textContent = `${data.pln.current} A`;
+      // lastData[0].pln.current = `${data.pln.current} A`;
+    }
+    if (data.pln.activity !== undefined) {
+      document.getElementById(`device-${deviceId}-pln-activity`).textContent = data.pln.activity;
+      // lastData[0].pln.activity = data.pln.activity;
+    }
+    if (data.pln.status !== undefined) {
+      const statusElement = document.getElementById(`device-${deviceId}-pln-status`);
+      statusElement.textContent = data.pln.status;
+      statusElement.className = `status ${
+        data.pln.status === "Aktif" ? "aktif" : "tidak-aktif"
+      }`;
+      // lastData[0].pln.status = `status ${
+      //   data.pln.status === "Aktif" ? "aktif" : "tidak-aktif"
+      // }`
+    }
+  }
+
+  // Update Accu data
+  if (data.accu) {
+    if (data.accu.voltage !== undefined) {
+      document.getElementById(
+        `device-${deviceId}-accu-voltage`
+      ).textContent = `${data.accu.voltage} V`;
+      // lastData[0].accu.voltage = `${data.accu.voltage} V`;
+    }
+    if (data.accu.current !== undefined) {
+      document.getElementById(
+        `device-${deviceId}-accu-current`
+      ).textContent = `${data.accu.current} A`;
+      // lastData[0].accu.current = `${data.accu.current} A`;
+    }
+    if (data.accu.activity !== undefined) {
+      document.getElementById(`device-${deviceId}-accu-activity`).textContent =
+        data.accu.activity;
+        // lastData[0].accu.activity = data.accu.activity;
+    }
+    if (data.accu.status !== undefined) {
+      const statusElement = document.getElementById(`device-${deviceId}-accu-status`);
+      statusElement.textContent = data.accu.status;
+      statusElement.className = `status ${
+        data.accu.status === "Aktif" ? "aktif" : "tidak-aktif"
+      }`;
+      // lastData[0].accu.status = `status ${
+      //   data.accu.status === "Aktif" ? "aktif" : "tidak-aktif"
+      // }`
+    }
+  }
+
+  // Update UPS data
+  if (data.ups) {
+    if (data.ups.voltage !== undefined) {
+      document.getElementById(
+        `device-${deviceId}-ups-voltage`
+      ).textContent = `${data.ups.voltage} V`;
+      // lastData[0].ups.voltage = `${data.ups.voltage} V`;
+    }
+    if (data.ups.current !== undefined) {
+      document.getElementById(
+        `device-${deviceId}-ups-current`
+      ).textContent = `${data.ups.current} A`;
+      // lastData[0].ups.current = `${data.ups.current} A`;
+    }
+    if (data.ups.activity !== undefined) {
+      document.getElementById(`device-${deviceId}-ups-activity`).textContent = data.ups.activity;
+      // lastData[0].ups.activity = data.ups.activity;
+    }
+    if (data.ups.status !== undefined) {
+      const statusElement = document.getElementById(`device-${deviceId}-ups-status`);
+      statusElement.textContent = data.ups.status;
+      statusElement.className = `status ${
+        data.ups.status === "Aktif" ? "aktif" : "tidak-aktif"
+      }`;
+      // lastData[0].ups.status = `status ${
+      //   data.ups.status === "Aktif" ? "aktif" : "tidak-aktif"
+      // }`;
+    }
+  }
+}
+
 // Fungsi untuk memperbarui grafik berdasarkan pilihan
 document
   .getElementById("chartSelector")
@@ -232,8 +282,9 @@ document
     let dataToUse;
     let maxY1; // Untuk skala maksimum sumbu y1
     let maxY2; // Untuk skala maksimum sumbu y2
+    selectedGraph = this.value;
 
-    if (selectedValue === "listrik") {
+    if (selectedValue === "pln") {
       dataToUse = dataListrik;
       maxY1 = 230; // Skala maksimum untuk Grafik Listrik (tegangan)
       maxY2 = 30; // Skala maksimum untuk Grafik Listrik (arus)
@@ -290,113 +341,5 @@ document
       },
     });
   });
-
-// function webSocketConnection(id) {
-//   // Connect to WebSocket server
-//   const socket = new WebSocket(
-//     `wss://s13783.blr1.piesocket.com/v3/${id}?api_key=7SEqHklfXLf4YSvF8OmgAd147ewDT0RT2tZrCE3f`
-//   );
-
-//   // Event: Connection opened
-//   socket.onopen = function () {
-//     console.log("WebSocket connection established.");
-//   };
-
-//   // Event: Message received
-//   socket.onmessage = function (event) {
-//     const data = JSON.parse(event.data);
-
-//     // Update the temperature
-//     if (data.temperature !== undefined) {
-//       document.getElementById(
-//         "temperature-value"
-//       ).textContent = `${data.temperature}°C`;
-//     }
-
-//     // Update PLN data
-//     if (data.pln) {
-//       if (data.pln.voltage !== undefined) {
-//         document.getElementById(
-//           "pln-voltage"
-//         ).textContent = `${data.pln.voltage} V`;
-//       }
-//       if (data.pln.current !== undefined) {
-//         document.getElementById(
-//           "pln-current"
-//         ).textContent = `${data.pln.current} A`;
-//       }
-//       if (data.pln.activity !== undefined) {
-//         document.getElementById("pln-activity").textContent = data.pln.activity;
-//       }
-//       if (data.pln.status !== undefined) {
-//         const statusElement = document.getElementById("pln-status");
-//         statusElement.textContent = data.pln.status;
-//         statusElement.className = `status ${
-//           data.pln.status === "Aktif" ? "aktif" : "tidak-aktif"
-//         }`;
-//       }
-//     }
-
-//     // Update Accu data
-//     if (data.accu) {
-//       if (data.accu.voltage !== undefined) {
-//         document.getElementById(
-//           "accu-voltage"
-//         ).textContent = `${data.accu.voltage} V`;
-//       }
-//       if (data.accu.current !== undefined) {
-//         document.getElementById(
-//           "accu-current"
-//         ).textContent = `${data.accu.current} A`;
-//       }
-//       if (data.accu.activity !== undefined) {
-//         document.getElementById("accu-activity").textContent =
-//           data.accu.activity;
-//       }
-//       if (data.accu.status !== undefined) {
-//         const statusElement = document.getElementById("accu-status");
-//         statusElement.textContent = data.accu.status;
-//         statusElement.className = `status ${
-//           data.accu.status === "Aktif" ? "aktif" : "tidak-aktif"
-//         }`;
-//       }
-//     }
-
-//     // Update UPS data
-//     if (data.ups) {
-//       if (data.ups.voltage !== undefined) {
-//         document.getElementById(
-//           "ups-voltage"
-//         ).textContent = `${data.ups.voltage} V`;
-//       }
-//       if (data.ups.current !== undefined) {
-//         document.getElementById(
-//           "ups-current"
-//         ).textContent = `${data.ups.current} A`;
-//       }
-//       if (data.ups.activity !== undefined) {
-//         document.getElementById("ups-activity").textContent = data.ups.activity;
-//       }
-//       if (data.ups.status !== undefined) {
-//         const statusElement = document.getElementById("ups-status");
-//         statusElement.textContent = data.ups.status;
-//         statusElement.className = `status ${
-//           data.ups.status === "Aktif" ? "aktif" : "tidak-aktif"
-//         }`;
-//       }
-//     }
-//   };
-
-//   // Event: Connection closed
-//   socket.onclose = function () {
-//     console.log("WebSocket connection closed.");
-//   };
-
-//   // Event: Error occurred
-//   socket.onerror = function (error) {
-//     console.error("WebSocket error:", error);
-//   };
-// }
-
 
 
