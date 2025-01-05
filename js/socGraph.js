@@ -1,172 +1,237 @@
 const ctx = document.getElementById("socChart").getContext("2d");
 
+
 // Data untuk grafik SoC
 const dataSoC = {
-  labels: [],
-  datasets: [
-    {
-      label: "SoC Route Utama (%)",
-      data: [],
-      borderColor: "#27ae60",
-      backgroundColor: "rgba(39, 174, 96, 0.2)",
-      borderWidth: 2,
-      fill: true
-    },
-    {
-      label: "SoC BTS 1 (%)",
-      data: [],
-      borderColor: "#2980b9",
-      backgroundColor: "rgba(41, 128, 185, 0.2)",
-      borderWidth: 2,
-      fill: true
-    },
-    {
-      label: "SoC BTS 2 (%)",
-      data: [],
-      borderColor: "#8e44ad",
-      backgroundColor: "rgba(142, 68, 173, 0.2)",
-      borderWidth: 2,
-      fill: true
-    }
-  ]
-};
-
-// Konfigurasi grafik
-const config = {
-  type: "line",
-  data: dataSoC,
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      y: {
-        beginAtZero: true,
-        max: 100,
-        min: 0,
-        ticks: {
-          stepSize: 10, // Menampilkan tick setiap 10%
-          callback: function(value) {
-            return value + '%';
-          }
-        },
-        grid: {
-          color: function(context) {
-            if (context.tick.value === 20) { // Garis merah untuk level kritis
-              return 'rgba(255, 0, 0, 0.5)';
+    labels: [],
+    datasets: [
+      {
+        label: "SoC Route Utama (%)",
+        data:[],
+        borderColor: "#27ae60",
+        backgroundColor: "rgba(39, 174, 96, 0.2)",
+        borderWidth: 2,
+        fill: true
+      },
+      {
+        label: "SoC BTS 1 (%)",
+        data:[],
+        borderColor: "#2980b9",
+        backgroundColor: "rgba(41, 128, 185, 0.2)",
+        borderWidth: 2,
+        fill: true
+      },
+      {
+        label: "SoC BTS 2 (%)",
+        data:[],
+        borderColor: "#8e44ad",
+        backgroundColor: "rgba(142, 68, 173, 0.2)",
+        borderWidth: 2,
+        fill: true
+      }
+    ]
+  };
+  
+  // Konfigurasi grafik
+  const config = {
+    type: "line",
+    data: dataSoC,
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100,
+          min: 0,
+          ticks: {
+            stepSize: 10, // Menampilkan tick setiap 10%
+            callback: function(value) {
+              return value + '%';
             }
-            return 'rgba(0, 0, 0, 0.1)';
           },
-          lineWidth: function(context) {
-            if (context.tick.value === 20) {
-              return 2;
+          grid: {
+            color: function(context) {
+              if (context.tick.value === 20) { // Garis merah untuk level kritis
+                return 'rgba(255, 0, 0, 0.5)';
+              }
+              return 'rgba(0, 0, 0, 0.1)';
+            },
+            lineWidth: function(context) {
+              if (context.tick.value === 20) {
+                return 2;
+              }
+              return 1;
             }
-            return 1;
+          },
+          title: {
+            display: true,
+            text: "State of Charge (%)",
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
           }
         },
+        x: {
+          grid: {
+            display: true,
+            drawBorder: true,
+          },
+          title: {
+            display: true,
+            text: "Waktu",
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          }
+        }
+      },
+      plugins: {
         title: {
           display: true,
-          text: "State of Charge (%)",
+          text: "Grafik State of Charge (SoC) Accu",
           font: {
-            size: 14,
+            size: 16,
             weight: 'bold'
+          },
+          padding: {
+            top: 10,
+            bottom: 30
           }
-        }
-      },
-      x: {
-        grid: {
-          display: true,
-          drawBorder: true,
         },
-        title: {
-          display: true,
-          text: "Waktu",
-          font: {
-            size: 14,
-            weight: 'bold'
+        legend: {
+          position: "bottom",
+          labels: {
+            padding: 20,
+            boxWidth: 40,
+            usePointStyle: true,
           }
-        }
-      }
-    },
-    plugins: {
-      title: {
-        display: true,
-        text: "Grafik State of Charge (SoC) Accu",
-        font: {
-          size: 16,
-          weight: 'bold'
         },
-        padding: {
-          top: 10,
-          bottom: 30
-        }
-      },
-      legend: {
-        position: "bottom",
-        labels: {
-          padding: 20,
-          boxWidth: 40,
-          usePointStyle: true,
-        }
-      },
-      tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        titleFont: {
-          size: 14
-        },
-        bodyFont: {
-          size: 13
-        },
-        padding: 15,
-        callbacks: {
-          label: function(context) {
-            let label = context.dataset.label || '';
-            if (context.parsed.y !== null) {
-              label += ': ' + context.parsed.y + '%';
+        tooltip: {
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          titleFont: {
+            size: 14
+          },
+          bodyFont: {
+            size: 13
+          },
+          padding: 15,
+          callbacks: {
+            label: function(context) {
+              let label = context.dataset.label || '';
+              if (context.parsed.y !== null) {
+                label += ': ' + context.parsed.y + '%';
+              }
+              // Tambahkan peringatan jika di bawah 20%
+              if (context.parsed.y < 20) {
+                label += ' (Level Kritis!)';
+              }
+              return label;
             }
-            // Tambahkan peringatan jika di bawah 20%
-            if (context.parsed.y < 20) {
-              label += ' (Level Kritis!)';
-            }
-            return label;
           }
         }
-      }
-    },
-    interaction: {
-      intersect: false,
-      mode: 'index'
-    },
-    elements: {
-      point: {
-        radius: 3,
-        hoverRadius: 6
       },
-      line: {
-        tension: 0.3 // Membuat garis lebih smooth
+      interaction: {
+        intersect: false,
+        mode: 'index'
+      },
+      elements: {
+        point: {
+          radius: 3,
+          hoverRadius: 6
+        },
+        line: {
+          tension: 0.3 // Membuat garis lebih smooth
+        }
+      },
+      animation: {
+        duration: 2000,
+        easing: 'easeInOutQuart'
       }
-    },
-    animation: {
-      duration: 2000,
-      easing: 'easeInOutQuart'
     }
-  }
-};
+  };
 
-// Buat grafik
+// Create the chart
 const socChart = new Chart(ctx, config);
 
-// Fungsi untuk update data realtime (opsional)
-function updateSoCData() {
-  fetch('api/soc.php')
-    .then(response => response.json())
-    .then(data => {
-      socChart.data.datasets[0].data = data.routeUtama;
-      socChart.data.datasets[1].data = data.bts1;
-      socChart.data.datasets[2].data = data.bts2;
-      socChart.update('none'); // Update tanpa animasi
-    })
-    .catch(error => console.error('Error:', error));
+// Fetch and update chart data
+function updateSoCData(date) {
+    fetch(`api/soc.php?date=${date}`)
+        .then(response => response.json())
+        .then(data => {
+            updateTable(data.data);
+
+            dataSoC.datasets[0].data = []
+            dataSoC.datasets[1].data = []
+            dataSoC.datasets[2].data = []
+
+            data.labels.forEach(item => {
+                dataSoC.labels.push(item.split(" ")[1])
+            });
+
+            graphData = [
+                [],
+                [],
+                []
+            ]
+
+            // socChart.data.labels = data.labels;
+            data.data.graph.forEach(item => {
+
+                switch (parseInt(item.device_id)){
+                    case 1:
+                        graphData[0].push(parseInt(item.soc))                        
+                    case 2:
+                        graphData[1].push(parseInt(item.soc))
+                    case 3:
+                        graphData[2].push(parseInt(item.soc))
+                    default:
+                        break;
+                }
+
+                dataSoC.datasets[0].data = graphData[0];
+                dataSoC.datasets[1].data = graphData[1];
+                dataSoC.datasets[2].data = graphData[2];
+            })  
+            
+
+            console.log("graphData --> ", graphData)
+            
+            socChart.update('none');
+        })
+        .catch(error => console.error("Error updating chart data:", error));
 }
 
-// Uncomment baris berikut untuk mengaktifkan update otomatis
-setInterval(updateSoCData, 300000); // Update setiap 5 menit
+// Fetch and update the table dynamically
+function updateTable(data) {
+    const tableBody = document.getElementById("tableBody");
+    tableBody.innerHTML = ""; // Clear existing rows
+
+    data.table.forEach(row => {
+        const tableRow = `
+            <tr>
+                <td><i class="fas fa-car-battery"></i> ${row.device_id}</td>
+                <td>${row.accu_volt} V</td>
+                <td>${row.accu_current} A</td>
+                <td>${row.soc} %</td>
+                <td>${row.accu_estimate_time || 'N/A'}</td>
+                <td>${row.accu_status}</td>
+            </tr>`;
+        tableBody.insertAdjacentHTML("beforeend", tableRow);
+    });
+}
+
+// Initialize date picker and update data
+document.getElementById("datePicker").addEventListener("change", function(event) {
+    const selectedDate = event.target.value;
+    updateSoCData(selectedDate); // Updates the chart
+});
+
+// Set default date and fetch initial data
+// const today = new Date().toISOString().split("T")[0];
+// document.getElementById("datePicker").value = today;
+
+// // Update the chart and table after socChart is initialized
+// updateSoCData(today);

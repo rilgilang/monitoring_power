@@ -1,79 +1,74 @@
 <?php
+// Database configuration
+$host = '127.0.0.1';
+$dbname = 'monitoring_power_2';
+$user = 'root';
+$password = '';
 
-include './config.php';
+header('Content-Type: application/json');
 
-function soc($date = "")
-{
-    // Get the PDO instance
-    global $pdo;
-
-    $query = "SELECT device_id, pln_volt, pln_current, accu_volt, accu_current, ups_volt, ups_current, soc, accu_estimate_time, created_at 
-              FROM log 
-              WHERE DATE(created_at) = :date
-              ORDER BY created_at ASC";
-
-    // Use today's date if no date is provided
-    $queryParams = [
-        ':date' => $date ? $date : date('Y-m-d')
-    ];
-
-    try {
-        $stmt = $pdo->prepare($query);
-        $stmt->execute($queryParams);
-        $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        // Initialize arrays for grouped data
-        $labels = [];
-        $graphData = [];
-        $socData = [];
-
-        foreach ($logs as $log) {
-            $deviceId = $log['device_id'];
-
-            // Add label if not already added
-            $timeLabel = date('H:i', strtotime($log['created_at']));
-            if (!in_array($timeLabel, $labels)) {
-                $labels[] = $timeLabel;
-            }
-
-            // Initialize device-specific arrays if not set
-            if (!isset($graphData[$deviceId])) {
-                $graphData[$deviceId] = [
-                    'soc' => [],
-                ];
-            }
-
-            // Push data into the respective device's graph arrays
-            $graphData[$deviceId]['soc'][] = (float)$log['soc'];
-
-            // Prepare SOC data for the device
-            if (!isset($socData[$deviceId])) {
-                $socData[$deviceId] = [
-                    'soc' => (float)$log['soc'],
-                    'accu_estimate_time' => (int)$log['accu_estimate_time'],
-                    'accu_volt' => (float)$log['accu_volt'],
-                    'accu_current' => (float)$log['accu_current'],
-                ];
-            }
-        }
-
-        // Build the JSON structure
-        $response = [
-            'labels' => $labels,
-            'data' => [
-                'graph' => $graphData,
-                'soc' => $socData,
-            ],
-        ];
-
-        // Return the JSON response
-        echo json_encode($response);
-    } catch (PDOException $e) {
-        // Return error message
-        echo json_encode(['error' => $e->getMessage(), 'status' => 'failed']);
-    }
+// Input validation
+if (!isset($_GET['date']) || empty($_GET['date'])) {
+    echo json_encode(['error' => 'Date parameter is required.']);
+    exit;
 }
 
-// Get the date parameter (optional)
-$date = isset($_GET['date']) ? $_GET['date'] : "";
-soc($date);
+$date = $_GET['date'];
+
+// Database connection
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo json_encode(['error' => 'Database connection failed: ' . $e->getMessage()]);
+    exit;
+}
+
+// Query to fetch data
+try {
+    // Fetch all rows for graph data
+    $stmtGraph = $pdo->prepare("
+        SELECT device_id, pln_volt, pln_current, accu_volt, accu_current, 
+               ups_volt, ups_current, soc, accu_estimate_time, created_at 
+        FROM log 
+        WHERE DATE(created_at) = :date 
+        ORDER BY created_at ASC
+    ");
+    $stmtGraph->bindParam(':date', $date);
+    $stmtGraph->execute();
+    $graphData = $stmtGraph->fetchAll(PDO::FETCH_ASSOC);
+
+    // Fetch the latest row for each device_id for the table
+    $stmtTable = $pdo->prepare("
+        SELECT t.device_id, t.pln_volt, t.pln_current, t.accu_volt, t.accu_current, t.accu_status,
+               t.ups_volt, t.ups_current, t.soc, t.accu_estimate_time, t.created_at 
+        FROM log t
+        GROUP BY t.device_id
+        ORDER BY t.device_id ASC
+    ");
+    $stmtTable->bindParam(':date', $date);
+    $stmtTable->execute();
+    $tableData = $stmtTable->fetchAll(PDO::FETCH_ASSOC);
+
+    // Prepare JSON response
+    $response = [
+        "labels" => [],
+        "data" => [
+            "graph" => [],
+            "table" => $tableData
+        ]
+    ];
+
+    foreach ($graphData as $row) {
+        $response['labels'][] = $row['created_at'];
+        $response['data']['graph'][] = [
+            'soc' => $row['soc'],
+            'device_id' => $row['device_id'],
+        ];
+    }
+
+    echo json_encode($response, JSON_PRETTY_PRINT);
+} catch (PDOException $e) {
+    echo json_encode(['error' => 'Query failed: ' . $e->getMessage()]);
+    exit;
+}

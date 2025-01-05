@@ -27,9 +27,6 @@ const dataListrik = {
   ],
 };
 
-// exports.dataListrik = dataListrik;
-
-
 // Data untuk Grafik Accu
 const dataAccu = {
   labels: [],
