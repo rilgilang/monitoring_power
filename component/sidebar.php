@@ -6,4 +6,4 @@
 <a href="device.php?id=2"><i class="fas fa-circle"></i> BTS 1</a>
 <a href="device.php?id=3"><i class="fas fa-circle"></i> BTS 2</a>
 <a href="resource_consumption.php"><i class="fas fa-plug"></i> Konsumsi Daya</a>
-<a href="log_aktivitas.php"><i class="fas fa-history"></i> Log Aktivitas</a>
+<a href="log_activity.php"><i class="fas fa-history"></i> Log Aktivitas</a>

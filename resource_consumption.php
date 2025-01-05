@@ -42,6 +42,14 @@
                         </tr>
                     </thead>
                     <tbody id="tableBody">
+                        <tr>
+                            <td><i class="fas fa-car-battery"></i> Reading...</td>
+                            <td>Reading...</td>
+                            <td>Reading...</td>
+                            <td>Reading...</td>
+                            <td>Reading...</td>
+                            <td>Reading...</td>
+                        </tr>
                         <!-- Dynamic table rows will be injected here -->
                     </tbody>
                 </table>
@@ -59,45 +67,46 @@
             </div>
             <script src="js/socGraph.js"></script>
             <script>
-                // Initialize date picker and update data
-                document.getElementById("datePicker").addEventListener("change", function(event) {
+                let intervalId; // To store the interval ID
+                const today = new Date().toISOString().split("T")[0];
+                const datePicker = document.getElementById("datePicker");
 
+                // Initialize the date picker with today's date
+                datePicker.value = today;
+
+                // Function to clear the interval
+                function clearUpdateInterval() {
+                    if (intervalId) {
+                        clearInterval(intervalId);
+                        intervalId = null;
+                    }
+                }
+
+                // Function to handle date change
+                function handleDateChange(selectedDate) {
+                    if (selectedDate === today) {
+                        // If the selected date is today, run updateSoCData in an interval
+                        clearUpdateInterval(); // Clear any existing interval
+                        intervalId = setInterval(() => {
+                            updateSoCData(selectedDate);
+                        }, 2000); // Update every 2 seconds
+                    } else {
+                        // If the selected date is not today, run updateSoCData only once
+                        clearUpdateInterval(); // Clear any existing interval
+                        updateSoCData(selectedDate);
+                    }
+                }
+
+                // Add event listener for date picker changes
+                datePicker.addEventListener("change", function(event) {
                     const selectedDate = event.target.value;
-                    console.log("berubah tod --> ", selectedDate)
-                    updateSoCData(selectedDate);
+                    handleDateChange(selectedDate);
                 });
 
-                // Set default date and fetch initial data
-                const today = new Date().toISOString().split("T")[0];
-                document.getElementById("datePicker").value = today;
-                updateSoCData(today);
-
-                // Fetch and update table dynamically
-                // function updateTable(date) {
-                //     fetch(`api/soc.php?date=${date}`)
-                //         .then(response => response.json())
-                //         .then(data => {
-                //             const tableBody = document.getElementById("tableBody");
-                //             tableBody.innerHTML = ""; // Clear existing rows
-
-                //             data.forEach(row => {
-
-                //                 console.log("row.voltage --> ", row.voltage)
-                //                 const tableRow = `
-                //                     <tr>
-                //                         <td><i class="fas fa-car-battery"></i> ${row.name}</td>
-                //                         <td>${row.voltage}</td>
-                //                         <td>${row.current}</td>
-                //                         <td>${row.soc}</td>
-                //                         <td>${row.estimatedTime}</td>
-                //                         <td>${row.status}</td>
-                //                     </tr>`;
-                //                 tableBody.insertAdjacentHTML("beforeend", tableRow);
-                //             });
-                //         })
-                //         .catch(error => console.error('Error fetching table data:', error));
-                // }
+                // Set initial state to today's date
+                handleDateChange(today);
             </script>
+
         </div>
     </div>
 

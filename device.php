@@ -97,6 +97,46 @@
   <!-- <script src="js/websocket.js"></script> -->
   <script src="js/deviceData.js"></script>
   <script>
+    let intervalId; // To store the interval ID
+    const today = new Date().toISOString().split("T")[0];
+    const datePicker = document.getElementById("datePicker");
+
+    // Initialize the date picker with today's date
+    datePicker.value = today;
+
+    // Function to clear the interval
+    function clearUpdateInterval() {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+    }
+
+    // Function to handle date change
+    function handleDateChange(selectedDate) {
+      if (selectedDate === today) {
+        // If the selected date is today, run updateSoCData in an interval
+        clearUpdateInterval(); // Clear any existing interval
+        intervalId = setInterval(() => {
+          fetchData(<?= $_GET['id'] ?>, selectedDate);
+        }, 2000); // Update every 2 seconds
+      } else {
+        // If the selected date is not today, run updateSoCData only once
+        clearUpdateInterval(); // Clear any existing interval
+        fetchData(<?= $_GET['id'] ?>, selectedDate);
+      }
+    }
+
+    // Add event listener for date picker changes
+    datePicker.addEventListener("change", function(event) {
+      const selectedDate = event.target.value;
+      handleDateChange(selectedDate);
+    });
+
+    // Set initial state to today's date
+    handleDateChange(today);
+  </script>
+  <!-- <script>
     setInterval(fetchData(<?= $_GET['id'] ?>, null), 2000);
     fetchData(<?= $_GET['id'] ?>, null); // Initial call to populate data
 
@@ -189,7 +229,7 @@
         notificationMessage.style.display = "none";
       }
     });
-  </script>
+  </script> -->
 </body>
 
 </html>

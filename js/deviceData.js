@@ -121,7 +121,7 @@ let currentChart = new Chart(ctx, {
 // Function to fetch data from the API and update the chart
 function fetchData(id, date) {
   $.ajax({
-    url: `api/monitoring.php?id=${id}&date=${date}`,
+    url: `api/device.php?device_id=${id}&date=${date}`,
     method: "GET",
     dataType: "json",
     success: function (result) {

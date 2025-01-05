@@ -9,7 +9,7 @@ header('Content-Type: application/json');
 
 // Input validation
 if (!isset($_GET['date']) || empty($_GET['date'])) {
-    echo json_encode(['error' => 'Date parameter is required.']);
+    echo json_encode(['error' => 'date parameter is required.']);
     exit;
 }
 

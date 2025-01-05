@@ -166,6 +166,7 @@ function updateSoCData(date) {
             dataSoC.datasets[0].data = []
             dataSoC.datasets[1].data = []
             dataSoC.datasets[2].data = []
+            dataSoC.labels = []
 
             data.labels.forEach(item => {
                 dataSoC.labels.push(item.split(" ")[1])
@@ -194,12 +195,10 @@ function updateSoCData(date) {
                 dataSoC.datasets[0].data = graphData[0];
                 dataSoC.datasets[1].data = graphData[1];
                 dataSoC.datasets[2].data = graphData[2];
-            })  
-            
-
-            console.log("graphData --> ", graphData)
-            
+            })    
             socChart.update('none');
+
+            console.log("dataSoC.datasets[0].data --> ", dataSoC.datasets[0].data)
         })
         .catch(error => console.error("Error updating chart data:", error));
 }
@@ -222,16 +221,3 @@ function updateTable(data) {
         tableBody.insertAdjacentHTML("beforeend", tableRow);
     });
 }
-
-// Initialize date picker and update data
-document.getElementById("datePicker").addEventListener("change", function(event) {
-    const selectedDate = event.target.value;
-    updateSoCData(selectedDate); // Updates the chart
-});
-
-// Set default date and fetch initial data
-// const today = new Date().toISOString().split("T")[0];
-// document.getElementById("datePicker").value = today;
-
-// // Update the chart and table after socChart is initialized
-// updateSoCData(today);
