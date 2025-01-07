@@ -17,7 +17,9 @@ try {
 
     // Table data
     // Fetch latest data
-    $q = "";
+    $q = "
+         SELECT * FROM log 
+         WHERE DATE(created_at) = CURDATE() GROUP BY device_id ORDER BY created_at DESC, device_id DESC";
     $stmt = $pdo->prepare($q);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
