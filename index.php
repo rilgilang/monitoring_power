@@ -52,7 +52,7 @@
                                     <td id="device-1-pln-soc">Reading...</td>
                                     <td id="device-1-pln-soe">Reading...</td>
                                     <td id="device-1-pln-activity">Reading...</td>
-                                    <td><span id="device-1-pln-status" class="status tidak-aktif">Reading...</span></td>
+                                    <td><span id="device-1-pln-status" class="status aktif">Reading...</span></td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-car-battery"></i> Accu</td>
@@ -61,7 +61,7 @@
                                     <td id="device-1-accu-soc">Reading...</td>
                                     <td id="device-1-accu-soe">Reading...</td>
                                     <td id="device-1-accu-activity">Reading...</td>
-                                    <td><span id="device-1-accu-status" class="status tidak-aktif">Reading...</span></td>
+                                    <td><span id="device-1-accu-status" class="status aktif">Reading...</span></td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-battery-full"></i> Batterai UPS</td>
@@ -70,7 +70,7 @@
                                     <td id="device-1-ups-soc">Reading...</td>
                                     <td id="device-1-ups-soe">Reading...</td>
                                     <td id="device-1-ups-activity">Reading...</td>
-                                    <td><span id="device-1-ups-status" class="status tidak-aktif">Reading...</span></td>
+                                    <td><span id="device-1-ups-status" class="status aktif">Reading...</span></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -107,7 +107,7 @@
                                     <td id="device-2-pln-soc">Reading...</td>
                                     <td id="device-2-pln-soe">Reading...</td>
                                     <td id="device-2-pln-activity">Reading...</td>
-                                    <td><span id="device-2-pln-status" class="status tidak-aktif">Reading...</span></td>
+                                    <td><span id="device-2-pln-status" class="status aktif">Reading...</span></td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-car-battery"></i> Accu</td>
@@ -116,7 +116,7 @@
                                     <td id="device-2-accu-soc">Reading...</td>
                                     <td id="device-2-accu-soe">Reading...</td>
                                     <td id="device-2-accu-activity">Reading...</td>
-                                    <td><span id="device-2-accu-status" class="status tidak-aktif">Reading...</span></td>
+                                    <td><span id="device-2-accu-status" class="status aktif">Reading...</span></td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-battery-full"></i> Batterai UPS</td>
@@ -125,7 +125,7 @@
                                     <td id="device-2-ups-soc">Reading...</td>
                                     <td id="device-2-ups-soe">Reading...</td>
                                     <td id="device-2-ups-activity">Reading...</td>
-                                    <td><span id="device-2-ups-status" class="status tidak-aktif">Reading...</span></td>
+                                    <td><span id="device-2-ups-status" class="status aktif">Reading...</span></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -162,7 +162,7 @@
                                     <td id="device-3-pln-soc">Reading...</td>
                                     <td id="device-3-pln-soe">Reading...</td>
                                     <td id="device-3-pln-activity">Reading...</td>
-                                    <td><span id="device-3-pln-status" class="status tidak-aktif">Reading...</span></td>
+                                    <td><span id="device-3-pln-status" class="status aktif">Reading...</span></td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-car-battery"></i> Accu</td>
@@ -171,7 +171,7 @@
                                     <td id="device-3-accu-soc">Reading...</td>
                                     <td id="device-3-accu-soe">Reading...</td>
                                     <td id="device-3-accu-activity">Reading...</td>
-                                    <td><span id="device-3-accu-status" class="status tidak-aktif">Reading...</span></td>
+                                    <td><span id="device-3-accu-status" class="status aktif">Reading...</span></td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-battery-full"></i> Batterai UPS</td>
@@ -180,7 +180,7 @@
                                     <td id="device-3-ups-soc">Reading...</td>
                                     <td id="device-3-ups-soe">Reading...</td>
                                     <td id="device-3-ups-activity">Reading...</td>
-                                    <td><span id="device-3-ups-status" class="status tidak-aktif">Reading...</span></td>
+                                    <td><span id="device-3-ups-status" class="status aktif">Reading...</span></td>
                                 </tr>
                             </tbody>
                         </table>

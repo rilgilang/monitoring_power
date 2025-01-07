@@ -35,7 +35,7 @@ function updateTable(data) {
                                 <td id="device-1-pln-soc">${""}</td>
                                 <td id="device-1-pln-soe">${data[0].soe}</td>
                                 <td id="device-1-pln-activity">${data[0].pln_activity}</td>
-                                <td><span id="device-1-pln-status" class="status tidak-aktif">${data[0].pln_status}</span></td>
+                                <td><span id="device-1-pln-status" class="${data[0].pln_status == "aktif" ? "status aktif" : "status tidak-aktif"}">${data[0].pln_status}</span></td>
                             </tr>
                             <tr>
                                 <td><i class="fas fa-car-battery"></i> Accu</td>
@@ -44,7 +44,7 @@ function updateTable(data) {
                                 <td id="device-1-accu-soc">${data[0].soc}</td>
                                 <td id="device-1-accu-soe">${""}</td>
                                 <td id="device-1-accu-activity">${data[0].accu_activity}</td>
-                                <td><span id="device-1-accu-status" class="status tidak-aktif">${data[0].accu_status}</span></td>
+                                <td><span id="device-1-accu-status" class="${data[0].accu_status == "aktif" ? "status aktif" : "status tidak-aktif"}">${data[0].accu_status}</span></td>
                             </tr>
                             <tr>
                                 <td><i class="fas fa-battery-full"></i> Batterai UPS</td>
@@ -53,7 +53,7 @@ function updateTable(data) {
                                 <td id="device-1-ups-soc">${""}</td>
                                 <td id="device-1-ups-soe">${data[0].soe}</td>
                                 <td id="device-1-ups-activity">${data[0].ups_activity}</td>
-                                <td><span id="device-1-ups-status" class="status tidak-aktif">${data[0].ups_status}</span></td>
+                                <td><span id="device-1-ups-status" class="${data[0].ups_status == "aktif" ? "status aktif" : "status tidak-aktif"}">${data[0].ups_status}</span></td>
                     </tr>
                 `;
                 break;
@@ -68,7 +68,7 @@ function updateTable(data) {
                     <td id="device-2-soc">${""}</td>
                     <td id="device-2-soe">${data[1].soe}</td>
                     <td id="device-2-pln-activity">${data[1].pln_activity}</td>
-                    <td><span id="device-2-pln-status" class="status tidak-aktif">${data[1].pln_status}</span></td>
+                    <td><span id="device-2-pln-status" class="${data[1].pln_status == "aktif"? "status aktif" : "status tidak-aktif"}">${data[1].pln_status}</span></td>
                 </tr>
                 <tr>
                     <td><i class="fas fa-car-battery"></i> Accu</td>
@@ -77,7 +77,7 @@ function updateTable(data) {
                     <td id="device-2-accu-soc">${data[1].soc}</td>
                     <td id="device-2-accu-soe">${""}</td>
                     <td id="device-2-accu-activity">${data[1].accu_activity}</td>
-                    <td><span id="device-2-accu-status" class="status tidak-aktif">${data[1].accu_status}</span></td>
+                    <td><span id="device-2-accu-status" class="${data[1].accu_status == "aktif"? "status aktif" : "status tidak-aktif"}">${data[1].accu_status}</span></td>
                 </tr>
                 <tr>
                     <td><i class="fas fa-battery-full"></i> Batterai UPS</td>
@@ -86,7 +86,7 @@ function updateTable(data) {
                     <td id="device-2-ups-soc">${""}</td>
                     <td id="device-2-ups-soe">${data[1].soe}</td>
                     <td id="device-2-ups-activity">${data[1].ups_activity}</td>
-                    <td><span id="device-2-ups-status" class="status tidak-aktif">${data[1].ups_status}</span></td>
+                    <td><span id="device-2-ups-status" class="${data[1].ups_status == "aktif"? "status aktif" : "status tidak-aktif"}">${data[1].ups_status}</span></td>
                 </tr>`
                 break;
                 case 2:
@@ -100,7 +100,7 @@ function updateTable(data) {
                         <td id="device-3-soc">${data[2].soc}</td>
                         <td id="device-3-soe">${""}</td>
                         <td id="device-3-pln-activity">${data[2].pln_activity}</td>
-                        <td><span id="device-3-pln-status" class="status tidak-aktif">${data[2].pln_status}</span></td>
+                        <td><span id="device-3-pln-status" class="${data[2].pln_status == "aktif"? "status aktif" : "status tidak-aktif"}">${data[2].pln_status}</span></td>
                     </tr>
                     <tr>
                         <td><i class="fas fa-car-battery"></i> Accu</td>
@@ -109,7 +109,7 @@ function updateTable(data) {
                         <td id="device-3-accu-soc">${""}</td>
                         <td id="device-3-accu-soe">${data[2].soe}</td>
                         <td id="device-3-accu-activity">${data[2].accu_activity}</td>
-                        <td><span id="device-3-accu-status" class="status tidak-aktif">${data[2].accu_status}</span></td>
+                        <td><span id="device-3-accu-status" class="${data[2].accu_status == "aktif"? "status aktif" : "status tidak-aktif"}">${data[2].accu_status}</span></td>
                     </tr>
                     <tr>
                         <td><i class="fas fa-battery-full"></i> Batterai UPS</td>
@@ -118,7 +118,7 @@ function updateTable(data) {
                         <td id="device-3-ups-soc">${""}</td>
                         <td id="device-3-ups-soe">${data[2].soe}</td>
                         <td id="device-3-ups-activity">${data[2].ups_activity}</td>
-                        <td><span id="device-3-ups-status" class="status tidak-aktif">${data[2].ups_status}</span></td>
+                        <td><span id="device-3-ups-status" class="${data[2].ups_status == "aktif"? "status aktif" : "status tidak-aktif"}">${data[2].ups_status}</span></td>
                     </tr>`;
                     break;
         }

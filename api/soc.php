@@ -1,11 +1,6 @@
 <?php
-// Database configuration
-$host = '127.0.0.1';
-$dbname = 'monitoring_power_2';
-$user = 'root';
-$password = '';
 
-header('Content-Type: application/json');
+include './config.php';
 
 // Input validation
 if (!isset($_GET['date']) || empty($_GET['date'])) {
@@ -14,15 +9,6 @@ if (!isset($_GET['date']) || empty($_GET['date'])) {
 }
 
 $date = $_GET['date'];
-
-// Database connection
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo json_encode(['error' => 'Database connection failed: ' . $e->getMessage()]);
-    exit;
-}
 
 // Query to fetch data
 try {
@@ -40,9 +26,10 @@ try {
 
     // Fetch the latest row for each device_id for the table
     $stmtTable = $pdo->prepare("
-        SELECT t.device_id, t.pln_volt, t.pln_current, t.accu_volt, t.accu_current, t.accu_info,
+        SELECT t.device_id, device_name, t.pln_volt, t.pln_current, t.accu_volt, t.accu_current, t.accu_info,
                t.ups_volt, t.ups_current, t.soc, t.soe, t.accu_estimate_time, t.created_at 
         FROM log t
+        JOIN device d on t.device_id = d.id
         GROUP BY t.device_id
         ORDER BY t.device_id ASC
     ");

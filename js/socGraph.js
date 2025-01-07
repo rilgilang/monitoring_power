@@ -211,13 +211,26 @@ function updateTable(data) {
     data.table.forEach(row => {
         const tableRow = `
             <tr>
-                <td><i class="fas fa-car-battery"></i> ${row.device_id}</td>
+                <td><i class="fas fa-car-battery"></i> ${row.device_name}</td>
                 <td>${row.accu_volt} V</td>
                 <td>${row.accu_current} A</td>
                 <td>${row.soc} %</td>
-                <td>${row.accu_estimate_time || 'N/A'}</td>
+                <td>${convertMinutesToHours(row.accu_estimate_time) || 'N/A'}</td>
                 <td>${row.accu_info}</td>
             </tr>`;
         tableBody.insertAdjacentHTML("beforeend", tableRow);
     });
+}
+
+function convertMinutesToHours(minutes) {
+  // Calculate hours and remaining minutes
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+
+  // Construct the output string
+  const hoursPart = hours > 0 ? `${hours} jam` : "";
+  const minutesPart = remainingMinutes > 0 ? `${remainingMinutes} menit` : "";
+
+  // Combine hours and minutes with a space
+  return [hoursPart, minutesPart].filter(Boolean).join(" ");
 }
