@@ -60,7 +60,7 @@ try {
     $extraQuery = "
          SELECT temperature, pln_volt AS pln_voltage, pln_current, pln_activity, pln_status, 
                 accu_volt AS accu_voltage, accu_current, accu_activity, accu_status, 
-                ups_volt AS ups_voltage, ups_current, ups_activity, ups_status
+                ups_volt AS ups_voltage, ups_current, ups_activity, ups_status, soe, soc
          FROM log 
          WHERE device_id = ? AND DATE(created_at) = CURDATE() ORDER BY created_at DESC LIMIT 1";
     $extraStmt = $pdo->prepare($extraQuery);
@@ -79,6 +79,8 @@ try {
             'current' => (float) $extraData['pln_current'],
             'activity' => $extraData['pln_activity'],
             'status' => $extraData['pln_status'],
+            'soe' => $extraData['soe'],
+            'soc' => $extraData['soc'],
         ];
 
         $accu = [
@@ -86,6 +88,8 @@ try {
             'current' => (float) $extraData['accu_current'],
             'activity' => $extraData['accu_activity'],
             'status' => $extraData['accu_status'],
+            'soe' => $extraData['soe'],
+            'soc' => $extraData['soc'],
         ];
 
         $ups = [
@@ -93,6 +97,8 @@ try {
             'current' => (float) $extraData['ups_current'],
             'activity' => $extraData['ups_activity'],
             'status' => $extraData['ups_status'],
+            'soe' => $extraData['soe'],
+            'soc' => $extraData['soc'],
         ];
     }
 

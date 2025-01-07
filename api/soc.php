@@ -40,8 +40,8 @@ try {
 
     // Fetch the latest row for each device_id for the table
     $stmtTable = $pdo->prepare("
-        SELECT t.device_id, t.pln_volt, t.pln_current, t.accu_volt, t.accu_current, t.accu_status,
-               t.ups_volt, t.ups_current, t.soc, t.accu_estimate_time, t.created_at 
+        SELECT t.device_id, t.pln_volt, t.pln_current, t.accu_volt, t.accu_current, t.accu_info,
+               t.ups_volt, t.ups_current, t.soc, t.soe, t.accu_estimate_time, t.created_at 
         FROM log t
         GROUP BY t.device_id
         ORDER BY t.device_id ASC

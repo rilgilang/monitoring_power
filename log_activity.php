@@ -31,7 +31,8 @@
                             <th>Sumber Daya</th>
                             <th>Tegangan</th>
                             <th>Arus</th>
-                            <th>Aktivitas</th>
+                            <th>SoC</th>
+                            <th>SoE</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -58,15 +59,15 @@
 
                 data.forEach(entry => {
                     // Add PLN row
-                    const plnRow = createTableRow(entry.timestamp, 'PLN', entry.pln.volt, entry.pln.current, entry.pln.activity, entry.pln.status);
+                    const plnRow = createTableRow(entry.timestamp, 'PLN', entry.pln.volt, entry.pln.current, entry.pln.soc, entry.pln.soe, entry.pln.status);
                     tableBody.appendChild(plnRow);
 
                     // Add Accu row
-                    const accuRow = createTableRow(entry.timestamp, 'Accu', entry.accu.volt, entry.accu.current, entry.accu.activity, entry.accu.status);
+                    const accuRow = createTableRow(entry.timestamp, 'Accu', entry.accu.volt, entry.accu.current, entry.accu.soc, entry.accu.soe, entry.accu.status);
                     tableBody.appendChild(accuRow);
 
                     // Add UPS row
-                    const upsRow = createTableRow(entry.timestamp, 'UPS', entry.ups.volt, entry.ups.current, entry.ups.activity, entry.ups.status);
+                    const upsRow = createTableRow(entry.timestamp, 'UPS', entry.ups.volt, entry.ups.current, entry.ups.soc, entry.ups.soe, entry.ups.status);
                     tableBody.appendChild(upsRow);
                 });
             } catch (error) {
@@ -75,7 +76,7 @@
         }
 
         // Helper function to create a table row
-        function createTableRow(timestamp, source, voltage, current, activity, status) {
+        function createTableRow(timestamp, source, voltage, current, soc, soe, status) {
             const row = document.createElement('tr');
 
             row.innerHTML = `
@@ -83,7 +84,8 @@
                 <td>${source}</td>
                 <td>${voltage}</td>
                 <td>${current}</td>
-                <td>${activity}</td>
+                <td>${soc}</td>
+                <td>${soe}</td>
                 <td>${status}</td>
             `;
 

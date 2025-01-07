@@ -198,7 +198,7 @@ function updateSoCData(date) {
             })    
             socChart.update('none');
 
-            console.log("dataSoC.datasets[0].data --> ", dataSoC.datasets[0].data)
+
         })
         .catch(error => console.error("Error updating chart data:", error));
 }
@@ -216,7 +216,7 @@ function updateTable(data) {
                 <td>${row.accu_current} A</td>
                 <td>${row.soc} %</td>
                 <td>${row.accu_estimate_time || 'N/A'}</td>
-                <td>${row.accu_status}</td>
+                <td>${row.accu_info}</td>
             </tr>`;
         tableBody.insertAdjacentHTML("beforeend", tableRow);
     });

@@ -22,20 +22,23 @@ try {
             'pln' => [
                 'volt' => $row['pln_volt'],
                 'current' => $row['pln_current'],
-                'activity' => $row['pln_activity'],
-                'status' => $row['pln_status']
+                'soe' => $row['soe'],
+                'soc' => $row['soc'],
+                'status' => $row['pln_status'],
             ],
             'accu' => [
                 'volt' => $row['accu_volt'],
                 'current' => $row['accu_current'],
-                'activity' => $row['accu_activity'],
-                'status' => $row['accu_status']
+                'soe' => $row['soe'],
+                'soc' => $row['soc'],
+                'status' => $row['accu_status'],
             ],
             'ups' => [
                 'volt' => $row['ups_volt'],
                 'current' => $row['ups_current'],
-                'activity' => $row['ups_activity'],
-                'status' => $row['ups_status']
+                'soe' => $row['soe'],
+                'soc' => $row['soc'],
+                'status' => $row['ups_status'],
             ]
         ];
     }

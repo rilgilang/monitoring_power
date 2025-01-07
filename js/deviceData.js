@@ -192,6 +192,17 @@ function fillTable(data, deviceId){
       ).textContent = `${data.pln.current} A`;
       // lastData[0].pln.current = `${data.pln.current} A`;
     }
+
+    if (data.pln.soc !== undefined) {
+      document.getElementById(`device-${deviceId}-pln-soc`).textContent = "";
+      // lastData[0].pln.activity = data.pln.activity;
+    }
+
+    if (data.pln.soe !== undefined) {
+      document.getElementById(`device-${deviceId}-pln-soe`).textContent = data.pln.soe;
+      // lastData[0].pln.activity = data.pln.activity;
+    }
+
     if (data.pln.activity !== undefined) {
       document.getElementById(`device-${deviceId}-pln-activity`).textContent = data.pln.activity;
       // lastData[0].pln.activity = data.pln.activity;
@@ -222,6 +233,17 @@ function fillTable(data, deviceId){
       ).textContent = `${data.accu.current} A`;
       // lastData[0].accu.current = `${data.accu.current} A`;
     }
+
+    if (data.accu.soc !== undefined) {
+      document.getElementById(`device-${deviceId}-accu-soc`).textContent = data.accu.soc;
+      // lastData[0].pln.activity = data.pln.activity;
+    }
+
+    if (data.accu.soe !== undefined) {
+      document.getElementById(`device-${deviceId}-accu-soe`).textContent = "";
+      // lastData[0].pln.activity = data.pln.activity;
+    }
+
     if (data.accu.activity !== undefined) {
       document.getElementById(`device-${deviceId}-accu-activity`).textContent =
         data.accu.activity;
@@ -253,6 +275,17 @@ function fillTable(data, deviceId){
       ).textContent = `${data.ups.current} A`;
       // lastData[0].ups.current = `${data.ups.current} A`;
     }
+
+    if (data.ups.soc !== undefined) {
+      document.getElementById(`device-${deviceId}-ups-soc`).textContent = "";
+      // lastData[0].pln.activity = data.pln.activity;
+    }
+
+    if (data.ups.soe !== undefined) { 
+      document.getElementById(`device-${deviceId}-ups-soe`).textContent = data.ups.soe;
+      // lastData[0].pln.activity = data.pln.activity;
+    }
+
     if (data.ups.activity !== undefined) {
       document.getElementById(`device-${deviceId}-ups-activity`).textContent = data.ups.activity;
       // lastData[0].ups.activity = data.ups.activity;
