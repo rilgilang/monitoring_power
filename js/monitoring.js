@@ -18,13 +18,15 @@ function updateTable(data) {
     tableBody3.innerHTML = ""; // Clear existing rows
 
 
-    const tableRow1 = ``;
-    const tableRow2 = ``;
-    const tableRow3 = ``;
+    let tableRow1 = ``;
+    let tableRow2 = ``;
+    let tableRow3 = ``;
 
     for (let index = 0; index < data.length; index++) {
         switch (index) {
             case 0:
+                const temperature1 = document.getElementById("device-1-temperature");
+                temperature1.textContent= `${data[0].temperature} °C`;
                 tableRow1 += `
                 <tr>
                             <td><i class="fas fa-bolt"></i> Listrik PLN</td>
@@ -54,7 +56,10 @@ function updateTable(data) {
                                 <td><span id="device-1-ups-status" class="status tidak-aktif">${data[0].ups_status}</span></td>
                     </tr>
                 `;
+                break;
             case 1:
+                const temperature2 = document.getElementById("device-2-temperature");
+                temperature2.textContent= `${data[1].temperature} °C`;
                 tableRow2 += `  
                 <tr>
                     <td><i class="fas fa-bolt"></i> Listrik PLN</td>
@@ -83,7 +88,10 @@ function updateTable(data) {
                     <td id="device-2-ups-activity">${data[1].ups_activity}</td>
                     <td><span id="device-2-ups-status" class="status tidak-aktif">${data[1].ups_status}</span></td>
                 </tr>`
+                break;
                 case 2:
+                    const temperature3 = document.getElementById("device-3-temperature");
+                    temperature3.textContent= `${data[2].temperature} °C`;
                     tableRow3 += `
                     <tr>
                         <td><i class="fas fa-bolt"></i> Listrik PLN</td>
@@ -112,6 +120,7 @@ function updateTable(data) {
                         <td id="device-3-ups-activity">${data[2].ups_activity}</td>
                         <td><span id="device-3-ups-status" class="status tidak-aktif">${data[2].ups_status}</span></td>
                     </tr>`;
+                    break;
         }
         
     }
@@ -119,14 +128,6 @@ function updateTable(data) {
     tableBody1.insertAdjacentHTML("beforeend", tableRow1);
     tableBody2.insertAdjacentHTML("beforeend", tableRow2);
     tableBody3.insertAdjacentHTML("beforeend", tableRow3);
-
-    const temperature1 = document.getElementById("device-1-temperature");
-    const temperature2 = document.getElementById("device-2-temperature");
-    const temperature3 = document.getElementById("device-3-temperature");
-
-    temperature1.textContent= `${data[0].temperature} °C`;
-    temperature2.textContent= `${data[1].temperature} °C`;
-    temperature3.textContent= `${data[2].temperature} °C`;
 }
 
 updateMonitoringTable();
