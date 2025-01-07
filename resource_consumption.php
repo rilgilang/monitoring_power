@@ -19,13 +19,7 @@
         <div class="header">
             <i class="fas fa-bars menu-icon" id="menu-icon"></i>
             <h1>Konsumsi Daya</h1>
-            <div style="position: relative;">
-                <i class="fas fa-bell notification-icon" id="notification-icon"></i>
-                <span class="notification-badge" id="notification-badge">0</span>
-            </div>
-            <div id="notification-message" class="notification-message">
-                Tidak ada notifikasi baru
-            </div>
+            <?php include("./component/notification.php"); ?>
         </div>
         <div class="main-content" style="margin-top: 20px">
             <div class="route-utama">Accu</div>

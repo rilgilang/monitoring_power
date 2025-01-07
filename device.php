@@ -18,11 +18,7 @@
       <h1>
         <?= deviceChecker($_GET['id']) ?>
       </h1>
-      <div style="position: relative;">
-        <i class="fas fa-bell notification-icon" id="notification-icon"></i>
-        <span class="notification-badge" id="notification-badge">0</span>
-      </div>
-      <div id="notification-message" class="notification-message">Tidak ada notifikasi baru</div>
+      <?php include("./component/notification.php"); ?>
     </div>
 
     <div class="sidebar" id="sidebar">
@@ -136,6 +132,7 @@
     // Set initial state to today's date
     handleDateChange(today);
   </script>
+  <script src="js/script.js"></script>
   <!-- <script>
     setInterval(fetchData(<?= $_GET['id'] ?>, null), 2000);
     fetchData(<?= $_GET['id'] ?>, null); // Initial call to populate data

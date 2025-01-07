@@ -20,7 +20,7 @@ function updateTable(data) {
 
     const tableRow1 = `
                     <tr>
-                                    <td><i class="fas fa-bolt"></i> Listrik PLN</td>
+                                <td><i class="fas fa-bolt"></i> Listrik PLN</td>
                                     <td id="device-1-pln-voltage">${data[0].pln_volt}</td>
                                     <td id="device-1-pln-current">${data[0].pln_current}</td>
                                     <td id="device-1-pln-activity">${data[0].pln_activity}</td>

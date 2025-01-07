@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<?php 
+    <?php
     include './const/const.php';
-    include("./component/header.php"); 
+    include("./component/header.php");
     ?>
     <title>Log Aktivitas</title>
 </head>
+
 <body>
     <div class="sidebar" id="sidebar">
         <?php include("./component/sidebar.php"); ?>
@@ -16,13 +18,7 @@
         <div class="header">
             <i class="fas fa-bars menu-icon" id="menu-icon"></i>
             <h1>LOG AKTIVITAS</h1>
-            <div style="position: relative;">
-                <i class="fas fa-bell notification-icon" id="notification-icon"></i>
-                <span class="notification-badge" id="notification-badge">0</span>
-            </div>
-            <div id="notification-message" class="notification-message">
-                Tidak ada notifikasi baru
-            </div>
+            <?php include("./component/notification.php"); ?>
         </div>
 
         <div class="main-content">
@@ -32,220 +28,77 @@
                     <thead>
                         <tr>
                             <th>Waktu</th>
-                            <th>Aktivitas</th>
-                            <th>Status</th>
                             <th>Sumber Daya</th>
                             <th>Tegangan</th>
-                            <th>Titik</th>
+                            <th>Arus</th>
+                            <th>Aktivitas</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>2024-10-10 12:00</td>
-                            <td>Perubahan Tegangan</td>
-                            <td>Turun</td>
-                            <td>ACCU</td>
-                            <td>10.0 V</td>
-                            <td>BTS 1</td>
-                        </tr>
-                        <tr>
-                            <td>2024-10-10 11:00</td>
-                            <td>Tegangan Normal</td>
-                            <td>Normal</td>
-                            <td>Listrik</td>
-                            <td>220 V</td>
-                            <td>Route Utama</td>
-                        </tr>
-                        <tr>
-                            <td>2024-10-10 10:00</td>
-                            <td>Perubahan Tegangan</td>
-                            <td>Naik</td>
-                            <td>Ups</td>
-                            <td>12 V</td>
-                            <td>BTS 2</td>
-                        </tr>
-                        <tr>
-                            <td>2024-10-10 9:00</td>
-                            <td>Perubahan Tegangan</td>
-                            <td>Turun</td>
-                            <td>Accu</td>
-                            <td>0 V</td>
-                            <td>Route Utama</td>
-                        </tr>
-                        <tr>
-                            <td>2024-10-10 8:00</td>
-                            <td>Tegangan Normal</td>
-                            <td>Normal</td>
-                            <td>Listrik</td >
-                            <td>12.5 V</td>
-                            <td>BTS 1</td>
-                        </tr>
-                        <tr>
-                            <td>2024-10-10 7:00</td>
-                            <td>Perubahan Tegangan</td>
-                            <td>Turun</td>
-                            <td>Accu</td>
-                            <td>0 V</td>
-                            <td>BTS 2</td>
-                        </tr>
-                        <tr>
-                            <td>2024-10-10 6:00</td>
-                            <td>Tegangan Normal</td>
-                            <td>Normal</td>
-                            <td>Ups</td>
-                            <td>12 V</td>
-                            <td>BTS 1</td>
-                        </tr>
-                        <tr>
-                            <td>2024-10-10 5:00</td>
-                            <td>Perubahan Tegangan</td>
-                            <td>Turun</td>
-                            <td>Listrik</td>
-                            <td>180 V</td>
-                            <td>Route Utama</td>
-                        </tr>
-                        <tr>
-                            <td>2024-10-10 4:00</td>
-                            <td>Perubahan Tegangan</td>
-                            <td>Naik</td>
-                            <td>Listrik</td>
-                            <td>210 V</td>
-                            <td>BTS 1</td>
-                        </tr>
-                        <tr>
-                            <td>2024-10-10 3:00</td>
-                            <td>Tegangan Normal</td>
-                            <td>Normal</td>
-                            <td>Accu</td>
-                            <td>12.5 V</td>
-                            <td>BTS 1</td>
-                        </tr>
-                        <tr>
-                            <td>2024-10-10 2:00</td>
-                            <td>Perubahan Tegangan</td>
-                            <td>Turun</td>
-                            <td>Accu</td>
-                            <td>0 V</td>
-                            <td>BTS 1</td>
-                        </tr>
-                        <tr>
-                            <td>2024-10-10 1:00</td>
-                            <td>Perubahan Tegangan</td>
-                            <td>Naik</td>
-                            <td>Ups</td>
-                            <td>12.0 V</td>
-                            <td>BTS 2</td>
-                        </tr>
-                        <tr>
-                            <td>2024-10-10 00:00</td>
-                            <td>Perubahan Tegangan</td>
-                            <td>Turun</td>
-                            <td>Listrik</td>
-                            <td>0 V</td>
-                            <td>Route Utama</td>
-                        </tr>
+                    <tbody id="tableBody">
+                        <!-- Data rows will be populated here dynamically -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
     <script>
-        function updateDate() {
-            const now = new Date();
-            const options = {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                weekday: "long",
-            };
-            const dateStr = now.toLocaleDateString("id-ID", options);
-            document
-                .getElementById("currentDate")
-                .querySelector("span").textContent = dateStr;
-            document.getElementById("datePicker").value = now
-                .toISOString()
-                .split("T")[0];
-        }
+        // Fetch data from the backend and populate the table
+        async function fetchDataAndPopulateTable() {
+            try {
+                const response = await fetch('/api/logs.php');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
 
-        document
-            .getElementById("datePicker")
-            .addEventListener("change", function (event) {
-                const selectedDate = new Date(event.target.value);
-                alert("Tanggal dipilih: " + selectedDate.toLocaleDateString("id-ID"));
-            });
+                const tableBody = document.getElementById('tableBody');
+                tableBody.innerHTML = ''; // Clear existing rows
 
-        setInterval(updateDate, 1000);
-        updateDate();
-    </script>
-    <script>
-        const menuIcon = document.getElementById("menu-icon");
-        const sidebar = document.getElementById("sidebar");
-        const content = document.getElementById("content");
-        const notificationIcon = document.getElementById("notification-icon");
-        const notificationMessage = document.getElementById("notification-message");
-        const notificationBadge = document.getElementById("notification-badge");
+                data.forEach(entry => {
+                    // Add PLN row
+                    const plnRow = createTableRow(entry.timestamp, 'PLN', entry.pln.volt, entry.pln.current, entry.pln.activity, entry.pln.status);
+                    tableBody.appendChild(plnRow);
 
-        // Contoh data notifikasi
-        const notifications = [
-            "Notifikasi 1: Sistem berjalan dengan baik.",
-            "Notifikasi 2: Pembaruan perangkat lunak tersedia.",
-            "Notifikasi 3: Perubahan status pada sumber daya.",
-        ];
+                    // Add Accu row
+                    const accuRow = createTableRow(entry.timestamp, 'Accu', entry.accu.volt, entry.accu.current, entry.accu.activity, entry.accu.status);
+                    tableBody.appendChild(accuRow);
 
-        // Array untuk menyimpan notifikasi yang sudah ditampilkan
-        let displayedNotifications = [];
-
-        // Fungsi untuk menampilkan notifikasi baru
-        function showNotification() {
-            // Ambil notifikasi acak dari array
-            const randomIndex = Math.floor(Math.random() * notifications.length);
-            const newNotification = notifications[randomIndex];
-
-            // Pastikan notifikasi belum ditampilkan sebelumnya
-            if (!displayedNotifications.includes(newNotification)) {
-                displayedNotifications.push(newNotification); // Tambahkan ke daftar yang ditampilkan
-
-                // Tambahkan notifikasi ke dalam elemen message
-                const notificationDiv = document.createElement("div");
-                notificationDiv.textContent = newNotification;
-                notificationDiv.className = "notification-item";
-                notificationMessage.appendChild(notificationDiv);
-
-                // Update jumlah notifikasi di badge
-                notificationBadge.textContent = displayedNotifications.length;
+                    // Add UPS row
+                    const upsRow = createTableRow(entry.timestamp, 'UPS', entry.ups.volt, entry.ups.current, entry.ups.activity, entry.ups.status);
+                    tableBody.appendChild(upsRow);
+                });
+            } catch (error) {
+                console.error('Error fetching data:', error);
             }
         }
 
-        // Menambahkan notifikasi baru setiap 5 detik
-        setInterval(showNotification, 5000);
+        // Helper function to create a table row
+        function createTableRow(timestamp, source, voltage, current, activity, status) {
+            const row = document.createElement('tr');
 
-        menuIcon.addEventListener("click", () => {
-            sidebar.classList.toggle("active");
-            sidebar.classList.toggle("small");
-            content.classList.toggle("active");
-        });
+            row.innerHTML = `
+                <td>${timestamp}</td>
+                <td>${source}</td>
+                <td>${voltage}</td>
+                <td>${current}</td>
+                <td>${activity}</td>
+                <td>${status}</td>
+            `;
 
-        notificationIcon.addEventListener("click", () => {
-            // Tampilkan atau sembunyikan pesan notifikasi
-            if (
-                notificationMessage.style.display === "none" ||
-                notificationMessage.style.display === ""
-            ) {
-                notificationMessage.style.display = "block"; // Tampilkan pesan
-            } else {
-                notificationMessage.style.display = "none"; // Sembunyikan pesan
-            }
-        });
+            return row;
+        }
 
-        // Menyembunyikan notifikasi jika mengklik di luar elemen
-        document.addEventListener("click", (event) => {
-            if (
-                !notificationIcon.contains(event.target) &&
-                !notificationMessage.contains(event.target)
-            ) {
-                notificationMessage.style.display = "none"; // Sembunyikan jika klik di luar
-            }
-        });
+        // Call fetchDataAndPopulateTable on page load
+        setInterval(() => {
+            fetchDataAndPopulateTable();
+        }, 2000);
+
+        fetchDataAndPopulateTable();
     </script>
+
+    <script src="js/script.js"></script>
 </body>
+
 </html>

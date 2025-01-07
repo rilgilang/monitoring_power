@@ -44,7 +44,6 @@ try {
 
     // Restructure the data
     foreach ($logs as $log) {
-        error_log("ini blok goblok");
         error_log($log['pln_volt']);
         $labels[] = date('H:i', strtotime($log['created_at'])); // Format time as "HH:mm"
         $pln_voltages[] = (float) $log['pln_volt']; // Convert voltage to float
@@ -68,26 +67,36 @@ try {
     $extraStmt->execute([$id]);
     $extraData = $extraStmt->fetch(PDO::FETCH_ASSOC);
 
-    $pln = [
-        'voltage' => (float) $extraData['pln_voltage'],
-        'current' => (float) $extraData['pln_current'],
-        'activity' => $extraData['pln_activity'],
-        'status' => $extraData['pln_status'],
-    ];
+    $pln = [];
 
-    $accu = [
-        'voltage' => (float) $extraData['accu_voltage'],
-        'current' => (float) $extraData['accu_current'],
-        'activity' => $extraData['accu_activity'],
-        'status' => $extraData['accu_status'],
-    ];
+    $accu = [];
 
-    $ups = [
-        'voltage' => (float) $extraData['ups_voltage'],
-        'current' => (float) $extraData['ups_current'],
-        'activity' => $extraData['ups_activity'],
-        'status' => $extraData['ups_status'],
-    ];
+    $ups = [];
+
+    if ($extraData != []) {
+        $pln = [
+            'voltage' => (float) $extraData['pln_voltage'],
+            'current' => (float) $extraData['pln_current'],
+            'activity' => $extraData['pln_activity'],
+            'status' => $extraData['pln_status'],
+        ];
+
+        $accu = [
+            'voltage' => (float) $extraData['accu_voltage'],
+            'current' => (float) $extraData['accu_current'],
+            'activity' => $extraData['accu_activity'],
+            'status' => $extraData['accu_status'],
+        ];
+
+        $ups = [
+            'voltage' => (float) $extraData['ups_voltage'],
+            'current' => (float) $extraData['ups_current'],
+            'activity' => $extraData['ups_activity'],
+            'status' => $extraData['ups_status'],
+        ];
+    }
+
+
 
     // Build the desired JSON structure
     $response = [
@@ -120,7 +129,7 @@ try {
                 ],
             ],
             // 'status_changed' => true,
-            'temperature' => (float) $extraData['temperature'],
+            'temperature' => $extraData != [] ? (float) $extraData['temperature'] : 0,
             'pln' => $pln,
             'accu' => $accu,
             'ups' => $ups,

@@ -18,10 +18,7 @@
         <div class="header">
             <i class="fas fa-bars menu-icon" id="menu-icon"></i>
             <h1>DASHBOARD</h1>
-            <div style="position: relative;">
-                <i class="fas fa-bell notification-icon" id="notification-icon"></i>
-                <span class="notification-badge" id="notification-badge">0</span>
-            </div>
+            <?php include("./component/notification.php"); ?>
             <div id="notification-message" class="notification-message">Tidak ada notifikasi baru</div>
         </div>
 
@@ -170,6 +167,7 @@
 
         <!-- <script type="module" src="js/websocket.js"></script> -->
         <script src="js/monitoring.js"></script>
+        <script src="js/script.js"></script>
     </div>
 </body>
 
