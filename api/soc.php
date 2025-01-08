@@ -13,15 +13,16 @@ $date = $_GET['date'];
 // Query to fetch data
 try {
     // Fetch all rows for graph data
-    $stmtGraph = $pdo->prepare("
+    $stmtGraph = "
         SELECT device_id, pln_volt, pln_current, accu_volt, accu_current, 
                ups_volt, ups_current, soc, accu_estimate_time, created_at 
         FROM log 
-        WHERE DATE(created_at) = :date 
+        WHERE DATE(created_at) = ?
         ORDER BY created_at ASC
-    ");
-    $stmtGraph->bindParam(':date', $date);
-    $stmtGraph->execute();
+    ";
+
+    $stmtGraph = $pdo->prepare($stmtGraph);
+    $stmtGraph->execute([$date]);
     $graphData = $stmtGraph->fetchAll(PDO::FETCH_ASSOC);
 
     // Fetch the latest row for each device_id for the table

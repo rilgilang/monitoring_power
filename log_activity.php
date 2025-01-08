@@ -48,7 +48,7 @@
         // Fetch data from the backend and populate the table
         async function fetchDataAndPopulateTable() {
             try {
-                const response = await fetch('/api/logs.php');
+                const response = await fetch(`/api/logs.php`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
