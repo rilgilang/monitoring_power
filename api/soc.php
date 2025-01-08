@@ -26,15 +26,15 @@ try {
     $graphData = $stmtGraph->fetchAll(PDO::FETCH_ASSOC);
 
     // Fetch the latest row for each device_id for the table
-    $stmtTable = $pdo->prepare("
+    $stmtTable = "
         SELECT t.device_id, device_name, t.pln_volt, t.pln_current, t.accu_volt, t.accu_current, t.accu_info,
                t.ups_volt, t.ups_current, t.soc, t.soe, t.accu_estimate_time, t.created_at 
         FROM log t
         JOIN device d on t.device_id = d.id
         GROUP BY t.device_id
         ORDER BY t.device_id ASC
-    ");
-    $stmtTable->$pdo->prepare($stmtTable);
+    ";
+    $stmtTable = $pdo->prepare($stmtTable);
     $stmtTable->execute([$date]);
     $tableData = $stmtTable->fetchAll(PDO::FETCH_ASSOC);
 
