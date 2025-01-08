@@ -34,8 +34,8 @@ try {
         GROUP BY t.device_id
         ORDER BY t.device_id ASC
     ");
-    $stmtTable->bindParam(':date', $date);
-    $stmtTable->execute();
+    $stmtTable->$pdo->prepare($stmtTable);
+    $stmtTable->execute([$date]);
     $tableData = $stmtTable->fetchAll(PDO::FETCH_ASSOC);
 
     // Prepare JSON response
